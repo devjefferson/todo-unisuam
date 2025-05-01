@@ -6,7 +6,7 @@ type Task = {
   completed: boolean;
 };
 
-export default function Home() {
+export default function Home() { 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [input, setInput] = useState("");
 
