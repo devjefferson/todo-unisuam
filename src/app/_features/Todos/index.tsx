@@ -1,5 +1,8 @@
-import { useState, ChangeEvent, KeyboardEvent } from "react";
+'use client'
+import { useState, ChangeEvent, KeyboardEvent, useEffect } from "react";
 import { CheckCircleIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
+import { XCircleIcon } from "@heroicons/react/16/solid";
 
 type Task = {
   text: string;
@@ -9,6 +12,15 @@ type Task = {
 export default function Home() { 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [input, setInput] = useState("");
+  const router = useRouter()
+  const token = localStorage.getItem('token')
+
+  useEffect(()=>{
+    if(!token){
+      router.push('/login')
+    }
+  
+  },[])
 
   const addTask = () => {
     if (input.trim() === "") return;
@@ -36,13 +48,18 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-4">
-      <div className="bg-white/20 backdrop-blur-md rounded-xl shadow-2xl p-8 w-full max-w-md border border-white/30">
-        <h1 className="text-3xl font-bold text-white text-center mb-6">📝 Lista de Tarefas - Unisuam</h1>
-
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 text-black">
+      <div className="bg-white/20 backdrop-blur-md rounded-xl shadow-2xl p-8 w-full max-w-md  relative">
+      <button onClick={()=> {
+        localStorage.removeItem('token') 
+        router.push('/login')
+      }} className="absolute top-4 right-4  px-4 py-2 rounded-lg">
+       <XCircleIcon className="h-5 w-5  hover:text-red-400 transition duration-500 cursor-pointer" />
+      </button>
+        <h1 className="text-3xl font-bold text-center mb-6">📝 Lista de Tarefas - Unisuam</h1>
         <div className="flex mb-6">
           <input
-            className="flex-grow px-4 py-2 rounded-l-lg bg-white/70 focus:outline-none text-gray-800 placeholder-gray-500"
+            className="flex-grow px-4 py-2 rounded-l-lg focus:outline-none text-gray-800 placeholder-gray-500 border border-gray-300 focus:border-green-500"
             type="text"
             placeholder="Digite uma tarefa..."
             value={input}
@@ -51,7 +68,7 @@ export default function Home() {
           />
           <button
             onClick={addTask}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-r-lg"
+            className="bg-green-500 hover:bg-green-600  px-4 py-2 rounded-r-lg"
           >
             Adicionar
           </button>
@@ -59,7 +76,7 @@ export default function Home() {
 
         <ul className="space-y-3 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-white/40 scrollbar-track-transparent">
           {tasks.length === 0 && (
-            <p className="text-white text-center">Nenhuma tarefa adicionada.</p>
+            <p className=" text-center">Nenhuma tarefa adicionada.</p>
           )}
           {tasks.map((task, index) => (
             <li
