@@ -1,7 +1,6 @@
-"use client"
 import Todos from "./_features/Todos";
 
-export default function Home() {
+export default async function Home() {
   return (
     <Todos />
   );

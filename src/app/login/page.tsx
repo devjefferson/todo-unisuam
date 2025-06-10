@@ -1,8 +1,6 @@
-'use client'
 import Cadastro from "./_features"
 
-
- const Page = () => {
+ const Page = async () => {
   return (
     <Cadastro />
   )
